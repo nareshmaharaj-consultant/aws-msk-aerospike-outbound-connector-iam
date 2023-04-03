@@ -65,3 +65,31 @@ Next we create the IAM Policy and Roles
 - Create the IAM Role. Under Common Use Cases, select EC2 and then next.
 - Under permissions, select the policy named *msk-tutorial-policy* and then next.
 - Give the role a name like *msk-tutorial-role* and click the Create Role button.
+
+Next we create a clinet machine where we install the Kafka tools to access our MKS cluster.
+
+- Create an ec2 instance type t2.micro
+- Use the default AMI: Amazon Linux 2023 AMI 2023.0.20230322.0 x86_64 HVM kernel-6.1
+  
+  - The AMI may be different at the time of reading this article
+  
+- Create a key pair if required
+- Under [Advanced Options.IAM instance profile], select the IAM Role created earlier
+- Lanuch the instance. 
+- Under the instances launched, choose the instance just created. Click on the securty tab and 
+  make a note of the security group associated with this instance.
+  
+  - e.g.: sg-0914e6271c97ae4c9 (launch-wizard-1)
+  
+- Open the VPC section
+  https://console.aws.amazon.com/vpc/
+  
+- Then click on Security Groups on the left hand menu
+- Find the security group from the MKS cluster and click on it.
+ 
+  - e.g.: sg-e5f51dfb
+  
+- Choose edit Inbound Rules
+- Create a new rule to allow all traffic from the new ec2 instance
+
+![sg.png](sg1.png)
