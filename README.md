@@ -3,7 +3,12 @@
 <img width="1000" src="img.png">
 </p>
 
-In this article we focus on establishing connectivity between 2 Aerospike clusters. The goal is to use Aerospike's Cross Data Center Replication feature ( XDR ) to seamlessly send data from a source cluster to a destination cluster. The source cluster needs network visibility of all Aerospike service ports in the remote cluster, and this can present problems, particularly in a Kubernetes environment. Placing a proxy server in front of the private Kubernetes destination cluster can overcome this problem and achieve the desired goal. To demonstrate the solution we start by installing the Kubernetes Operator that will schedule our source and destination databases. In this example, we set up our replication in one direction. Aerospike is capable of supporting 'master/master' replication and provides a conflict resolution [mechanism](https://docs.aerospike.com/server/architecture/xdr#bin-convergence-in-mesh-topology) in the event of update clashes. This too could be supported using the XDR proxy.
+In this article we create an AWS MKS Kafka resource using AWS IAM Roles 
+and Policies to authenticate user access. We then create an Aeropsike 
+cluster and send some sample messages to AWS Kafka via the Aerospike 
+Kafka Source connector. The article is centred around using IAM to 
+authenticase users and will guide the reader step by step on how to 
+achieve this.
 
 <div className="text--center">
 
