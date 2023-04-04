@@ -66,6 +66,8 @@ Next we create the IAM Policy and Roles
 - Under permissions, select the policy named *msk-tutorial-policy* and then next.
 - Give the role a name like *msk-tutorial-role* and click the Create Role button.
 
+## Kafka Client Machine
+
 Next we create a clinet machine where we install the Kafka tools to access our MKS cluster.
 
 - Create an ec2 instance type t2.micro
@@ -92,4 +94,14 @@ Next we create a clinet machine where we install the Kafka tools to access our M
 - Choose edit Inbound Rules
 - Create a new rule to allow all traffic from the new ec2 instance
 
-![sg.png](sg1.png)
+
+  > ![sg.png](sg1.png)
+
+
+## Kafka Topics
+So we have succesfully created our Kafka cluster and Kafka Client machine so lets 
+go ahead and test the access by creating a topic in Kafka, producing and comsuming messages
+to confirm everything is working as expected.
+
+- From the MSK Cluster make a note of the Kafka version being used. In this example we are using 2.8.1
+- 
