@@ -127,7 +127,13 @@ sasl.client.callback.handler.class=software.amazon.msk.auth.iam.IAMClientCallbac
 EOF
 ```
 
+Go to the AWS Console and view the MSK Cluster Client Information. You will see the screen below.
+There will be 3 endpoints we can use but for this illustration we only require one.
+- Example choose:
+  
+  - ```b-2.msktutorialcluster.450050.c11.kafka.us-east-1.amazonaws.com:9098``` 
 
+![img_1.png](img_1.png)
 
 
 
