@@ -162,7 +162,7 @@ messages from the designated Kafka topic.
 
 Produce some message via a console window. Open a new window and run the following Kafka producer command.
 Type 3 or 4 messages entering the 'return' key after each.
-```bash
+```text
 ./kafka-console-producer.sh --broker-list $BootstrapServerString --producer.config client.properties --topic aerospike-airforce-1
 >Instrument Check
 >Pre flight checks confirmed
@@ -170,8 +170,8 @@ Type 3 or 4 messages entering the 'return' key after each.
 ```
 
 We are noe ready to consume these messages. Open a new window and run the following
-```bash
-/kafka-console-consumer.sh --bootstrap-server $BootstrapServerString --consumer.config client.properties --topic aerospike-airforce-1 --from-beginning
+```text
+./kafka-console-consumer.sh --bootstrap-server $BootstrapServerString --consumer.config client.properties --topic aerospike-airforce-1 --from-beginning
 Instrument Check
 Pre flight checks confirmed
 Ready for takeoff
