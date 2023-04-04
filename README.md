@@ -132,8 +132,26 @@ There will be 3 endpoints we can use but for this illustration we only require o
 - Example choose:
   
   - ```b-2.msktutorialcluster.450050.c11.kafka.us-east-1.amazonaws.com:9098``` 
-
+  
 ![img_1.png](img_1.png)
 
+### Creating Topics
 
+From the kafka/bin folder run the command to create a topic called `aerospike-airforce-1`
+
+```bash
+export BootstrapServerString="b-2.msktutorialcluster.450050.c11.kafka.us-east-1.amazonaws.com:9098"
+./kafka-topics.sh --create --bootstrap-server $BootstrapServerString --command-config client.properties --replication-factor 3 --partitions 1 --topic aerospike-airforce-1
+```
+### Listing Topics
+To list the topics created run the command below. Notice our latest topic called `aerospike-airforce-1` 
+
+```bash 
+./kafka-topics.sh --bootstrap-server $BootstrapServerString --command-config client.properties --list
+MSKTutorialTopic
+__amazon_msk_canary
+__consumer_offsets
+aerospike
+aerospike-airforce-1
+```
 
