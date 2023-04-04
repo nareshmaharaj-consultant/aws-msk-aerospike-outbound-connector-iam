@@ -103,5 +103,31 @@ So we have succesfully created our Kafka cluster and Kafka Client machine so let
 go ahead and test the access by creating a topic in Kafka, producing and comsuming messages
 to confirm everything is working as expected.
 
-- From the MSK Cluster make a note of the Kafka version being used. In this example we are using 2.8.1
-- 
+- From the MSK Cluster make a note of the Kafka version being used. 
+  - In this example we are using 2.8.1
+- From the Kafka client machine install Java 11+
+  - ```sudo yum -y install java-11```
+  
+- Download and untar Apache Kafka
+  - ```wget https://archive.apache.org/dist/kafka/2.8.1/kafka_2.12-2.8.1.tgz```
+  - ```tar -xzf kafka_2.12-2.8.1.tgz```
+  
+- To use IAM we will need the MSK IAM Auth jar file. Download the jar to the Kafka libs folder
+
+  - ```cd kafka_2.12-2.8.1/libs/```
+  - ```wget https://github.com/aws/aws-msk-iam-auth/releases/download/v1.1.1/aws-msk-iam-auth-1.1.1-all.jar```
+  - ```cd ../bin/```
+  
+```bash
+cat <<EOF> client.properties
+security.protocol=SASL_SSL
+sasl.mechanism=AWS_MSK_IAM
+sasl.jaas.config=software.amazon.msk.auth.iam.IAMLoginModule required;
+sasl.client.callback.handler.class=software.amazon.msk.auth.iam.IAMClientCallbackHandler
+EOF
+```
+
+
+
+
+
