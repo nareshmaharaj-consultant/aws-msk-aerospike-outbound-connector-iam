@@ -207,7 +207,113 @@ Create the Aerospike Database as follows by firstly creating a new ec2 instance.
   
   ![img_5_msk.png](img_5_msk.png)
 
+ - Launch the instance and ssh onto the host.
+ - If you have an Aerospike License feature file upload it to the instance.
+ - Install the Aerospike Database Server
+```text
+export VER="6.1.0.2"
+sudo yum install java python3 openssl-devel wget git gcc maven bind-utils sysstat nc -y
+wget -O aerospike-tools.tgz 'https://www.aerospike.com/download/tools/latest/artifact/el8'
+tar -xvf aerospike-tools.tgz
+cd aerospike-tools_8.1.0_el8_x86_64
+sudo ./dep-check
+sudo ./asinstall
+wget -O aerospike.tgz https://enterprise.aerospike.com/enterprise/download/server/$VER/artifact/el8
+tar -xvf aerospike.tgz
+cd aerospike-server-enterprise-$VER-el8
+sudo ./asinstall
+sudo mkdir -p /var/log/aerospike/
+sudo systemctl enable aerospike
 
+```
+- Confirm the data storage disk for aerospike data is available
+```bash
+lsblk
+NAME    MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+xvda    202:0    0  10G  0 disk
+└─xvda1 202:1    0  10G  0 part /
+xvdb    202:16   0  10G  0 disk   <<----------------- This one!
+```
+- Replace the Aerospike configration file under /etc/aerospike/aerospike.conf with the following.
+ 
+  - Under ```heartbeat.address``` add in your internal 172.x.x.x address.
+  - For ```xdr.dc.node-address-port``` enter the {kafka-client-machine-address}:8080 
+```yaml
+# Aerospike database configuration file for use with systemd.
+
+service {
+  # paxos-single-replica-limit 1 # Number of nodes where the replica count is automatically
+  proto-fd-max 15000
+  service-threads 10
+  feature-key-file /etc/aerospike/features.conf
+  node-id A1
+  cluster-name CLA
+}
+
+logging {
+  file /var/log/aerospike/aerospike.log {
+    context any info
+  }
+}
+
+# public and private addresses
+network {
+  service {
+    address any
+    port 3000
+  }
+
+  heartbeat {
+    mode mesh
+    address 172.31.94.201
+    port 3002 # Heartbeat port for this node.
+    interval 150 # controls how often to send a heartbeat packet
+    timeout 10 # number of intervals after which a node is considered to be missing
+  }
+
+  fabric {
+    port 3001
+  }
+
+  info {
+    port 3003
+  }
+}
+
+namespace test {
+  replication-factor 2
+  memory-size 40G
+  default-ttl 0
+  index-type shmem
+  high-water-disk-pct 50
+  high-water-memory-pct 60
+  stop-writes-pct 90
+  nsup-period 0
+
+  storage-engine device {
+    device /dev/xvdb
+    data-in-memory false
+    write-block-size 128K
+    min-avail-pct 5
+  }
+}
+
+xdr {
+  # Change notification XDR block that round-robins between two connector nodes
+  dc aerospike-kafka-source {
+    connector true
+    node-address-port 172.31.58.190 8080
+    namespace test {
+    }
+  }
+}
+```
+- Start the Aerospike Service
+```bash
+sudo cp features.conf /etc/aerospike/
+sudo systemctl start aerospike
+sudo systemctl status aerospike
+```
 
 ## Aerospike Kafka Source Connector
 
