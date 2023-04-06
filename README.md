@@ -320,6 +320,77 @@ sudo systemctl status aerospike
 From the Kafka Client instance we can go ahead an [install](https://docs.aerospike.com/connect/kafka/from-asdb/installing#installing-on-linux) the Aerospike Kafka Source Connector. This 
 is our outbound connector to send data from the Aerospike database to MSK.
 
+```bash 
+sudo yum install java #( install 11+ JDK )
+wget https://enterprise.aerospike.com/artifacts/enterprise/aerospike-kafka-outbound/5.0.1/aerospike-kafka-outbound-5.0.1-1.noarch.rpm
+sudo rpm -i aerospike-kafka-outbound-5.0.0-1.noarch.rpm
+```
 
+Configure the outbound connector. Note outbound and source connector are used interchangeably 
+in this article.
 
+Add the following contents to the file ```/etc/aerospike-kafka-outbound/aerospike-kafka-outbound.yml```.
+Replacing the broker address for one of the nodes in the Kafka cluster under
+```producer-props.bootstrap.servers```
 
+```yaml
+# Change the configuration for your use case.
+#
+# Refer to https://www.aerospike.com/docs/connectors/enterprise/kafka/outbound/configuration/index.html
+# for details.
+
+# The connector's listening ports, TLS and network interface.
+service:
+  port: 8080
+
+# Format of the Kafka destination message.
+format:
+  mode: flat-json
+  metadata-key: metadata
+
+# Aerospike record routing to a Kafka destination.
+routing:
+  mode: static
+  destination: aerospike
+
+# Kafka producer initialization properties.
+producer-props:
+  bootstrap.servers:
+    - b-3.msktutorialcluster.450050.c11.kafka.us-east-1.amazonaws.com:9098
+  ssl.truststore.location: /etc/aerospike-kafka-outbound/kafka.client.truststore.jks
+  ssl.truststore.password: changeit
+  security.protocol: SASL_SSL
+  sasl.mechanism: AWS_MSK_IAM
+  sasl.jaas.config: software.amazon.msk.auth.iam.IAMLoginModule required awsProfileName=default;
+  sasl.client.callback.handler.class: software.amazon.msk.auth.iam.IAMClientCallbackHandler
+
+# The logging properties.
+logging:
+  file: /var/log/aerospike-kafka-outbound/aerospike-kafka-outbound.log
+  enable-console-logging: true
+  levels:
+    root: debug
+    record-parser: debug
+    server: debug
+    com.aerospike.connect: debug
+  ticker-interval: 3600
+```
+
+Create the ca certificate trust store for use in the config kafaka outbound connector config.
+```bash
+sudo cp /usr/lib/jvm/java-11-amazon-corretto/lib/security/cacerts /etc/aerospike-kafka-outbound/kafka.client.truststore.jks
+```
+
+You will need a copy the AWS IAM Kafka Auth Jar to made available to the connector. If you recall
+we downloaded this earlier and added the jar to the kafka/libs folder.
+```bash
+sudo cp kafka_2.12-2.8.1/libs/aws-msk-iam-auth-1.1.1-all.jar /opt/aerospike-kafka-outbound/lib/aws-msk-iam-auth-1.1.1-all.jar
+```
+
+Start the service
+```bash
+sudo systemctl enable aerospike-kafka-outbound
+sudo systemctl start aerospike-kafka-outbound
+```
+
+## Sending Data from Aerospike to Kafka
