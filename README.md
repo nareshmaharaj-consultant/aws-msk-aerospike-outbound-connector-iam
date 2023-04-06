@@ -11,6 +11,8 @@ authenticase users and will guide the reader step by step on how to
 achieve this.
 <div align="center">. . . .</div>
 
+![img_2.png](img_2.png)
+
 ## AWS MKS Kafka
 
 In this section we will setup a 3 node Kafka cluster. 
@@ -176,3 +178,18 @@ Instrument Check
 Pre flight checks confirmed
 Ready for takeoff
 ```
+
+## Aerospike Database Source
+So just a quick recap on what we have done so far. We created a Kafka 3 node cluster in AWS using MSK with IAM.
+We successfully created topics, produced and consumed messages using our IAM credentials.
+
+The next stage of our journey is to install out Aerospike Database and insert some message. Set up 
+our XDR ( Cross Data Centre Replication component ) to send data to the Kafka Source Connector. This will
+in turn send the messages to MSK.
+
+## Aerospike Kafka Source Connector
+
+So just a quick recap on what we have done so far. We created a Kafka 3 node cluster in AWS using MSK with IAM.
+We successfully created topics, produced and consumed messages using our IAM credentials.
+
+The next stage of our journey is to install
