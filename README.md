@@ -317,7 +317,9 @@ sudo systemctl status aerospike
 
 ## Aerospike Kafka Source Connector
 
-So just a quick recap on what we have done so far. We created a Kafka 3 node cluster in AWS using MSK with IAM.
-We successfully created topics, produced and consumed messages using our IAM credentials.
+From the Kafka Client instance we can go ahead an install the Aerospike Kafka Source Connector. This 
+is our outbound connector to send data from the Aerospike database to MSK.
 
-The next stage of our journey is to install
+Visit ![Download](https://docs.aerospike.com/connect/kafka/from-asdb/installing#installing-on-linux)
+
+
