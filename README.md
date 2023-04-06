@@ -317,9 +317,9 @@ sudo systemctl status aerospike
 
 ## Aerospike Kafka Source Connector
 
-From the Kafka Client instance we can go ahead an install the Aerospike Kafka Source Connector. This 
+From the Kafka Client instance we can go ahead an [install](https://docs.aerospike.com/connect/kafka/from-asdb/installing#installing-on-linux) the Aerospike Kafka Source Connector. This 
 is our outbound connector to send data from the Aerospike database to MSK.
 
-Visit ![Download](https://docs.aerospike.com/connect/kafka/from-asdb/installing#installing-on-linux)
+
 
 
