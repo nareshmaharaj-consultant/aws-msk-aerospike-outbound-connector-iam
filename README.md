@@ -1,6 +1,6 @@
 
 <p align="center">
-<img width="1000" src="img.png">
+<img width="1000" src="img_msk.png">
 </p>
 
 In this article we create an AWS MKS Kafka resource using AWS IAM Roles 
@@ -11,7 +11,7 @@ authenticase users and will guide the reader step by step on how to
 achieve this.
 <div align="center">. . . .</div>
 
-![img_2.png](img_2.png)
+![img_2_msk.png](img_2_msk.png)
 
 ## AWS MKS Kafka
 
@@ -97,7 +97,7 @@ Next we create a clinet machine where we install the Kafka tools to access our M
 - Create a new rule to allow all traffic from the new ec2 instance
 
 
-  > ![sg.png](sg1.png)
+  > ![sg1_msk.png](sg1_msk.png)
 
 
 ## Kafka Topics
@@ -135,7 +135,7 @@ There will be 3 endpoints we can use but for this illustration we only require o
   
   - ```b-2.msktutorialcluster.450050.c11.kafka.us-east-1.amazonaws.com:9098``` 
   
-![img_1.png](img_1.png)
+![img_1_msk.png](img_1_msk.png)
 
 ### Creating Topics
 
@@ -186,6 +186,28 @@ We successfully created topics, produced and consumed messages using our IAM cre
 The next stage of our journey is to install out Aerospike Database and insert some message. Set up 
 our XDR ( Cross Data Centre Replication component ) to send data to the Kafka Source Connector. This will
 in turn send the messages to MSK.
+
+Create the Aerospike Database as follows by firstly creating a new ec2 instance.
+
+- Recommend using Linux Centos
+  - Rocky 8 AMI: ami-043ceee68871e0bb5 ( us-east-1 )
+
+  
+  ![img_3_msk.png](img_3_msk.png)
+
+- Select the instance type as t2.medium
+
+    - Use t2.medium for e.g.
+
+  ![img_4_msk.png](img_4_msk.png)
+
+ - Add the extra volume for Aerospike storage
+
+   - Simple EBS volume is all that is required for now
+  
+  ![img_5_msk.png](img_5_msk.png)
+
+
 
 ## Aerospike Kafka Source Connector
 
