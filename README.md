@@ -187,16 +187,18 @@ Ready for takeoff
 ```
 
 ## Aerospike Database Source
-So just a quick recap on what we have done so far. We created a Kafka 3 node cluster in AWS using MSK with IAM.
-We successfully created topics, produced and consumed messages using our IAM credentials.
+So just a quick recap on what you have done so far. You created a Kafka 3 node cluster in AWS using MSK with IAM Roles and IAM Permissions.
+You then successfully created topics, produced and consumed messages using the IAM credentials created during the setup.
 
-The next stage of our journey is to install out Aerospike Database and insert some message. Set up 
-our XDR ( Cross Data Centre Replication component ) to send data to the Kafka Source Connector. This will
-in turn send the messages to MSK.
+The next stage of your journey is to install the Aerospike Database and insert some messages. Set up 
+a simple XDR (Cross Data Centre Replication) component to send data from the Aerospike Database to 
+the Aerospike Kafka Source Connector. This will in turn send the messages to AWS MSK.
 
-Create the Aerospike Database as follows by firstly creating a new ec2 instance.
+### Create the Aerospike Database.
 
-- Recommend using Linux Centos
+Start by creating a new ec2 instance.
+
+- For this demo you can use Linux Centos 8
   - Rocky 8 AMI: ami-043ceee68871e0bb5 ( us-east-1 )
 
   
