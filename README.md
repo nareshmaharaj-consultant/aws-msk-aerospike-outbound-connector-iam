@@ -135,24 +135,24 @@ sasl.client.callback.handler.class=software.amazon.msk.auth.iam.IAMClientCallbac
 EOF
 ```
 
-Go to the AWS Console and view the MSK Cluster Client Information. You will see the screen below.
-There will be 3 endpoints we can use but for this illustration we only require one.
+### Creating Topics
+
+Go to the AWS Console and view the MSK Cluster Client Information. See the screenshot below.
+There will be 3 endpoints to choose from, for this illustration we only require one.
 - Example choose:
   
   - ```b-2.msktutorialcluster.450050.c11.kafka.us-east-1.amazonaws.com:9098``` 
   
 ![img_1_msk.png](img_1_msk.png)
 
-### Creating Topics
-
-From the kafka/bin folder run the command to create a topic called `aerospike-airforce-1`
+From the kafka/bin folder run the command to create a topic. Lets call it `aerospike-airforce-1`
 
 ```bash
 export BootstrapServerString="b-2.msktutorialcluster.450050.c11.kafka.us-east-1.amazonaws.com:9098"
 ./kafka-topics.sh --create --bootstrap-server $BootstrapServerString --command-config client.properties --replication-factor 3 --partitions 1 --topic aerospike-airforce-1
 ```
 ### Listing Topics
-To list the topics created run the command below. Notice our latest topic called `aerospike-airforce-1` 
+To list the topics run the following. Notice our latest topic called `aerospike-airforce-1` just showed up.
 
 ```bash 
 ./kafka-topics.sh --bootstrap-server $BootstrapServerString --command-config client.properties --list
@@ -165,11 +165,11 @@ aerospike-airforce-1
 
 ### Produce and Consumer
 
-As much as this is Kafka-101 and quite rudimentary it makes sense to test our setup by sending and receiving 
+I agree this is Kafka-101 and not quite Hello-World but it makes sense to test our setup by sending and receiving 
 messages from the designated Kafka topic. 
 
-Produce some message via a console window. Open a new window and run the following Kafka producer command.
-Type 3 or 4 messages entering the 'return' key after each.
+Produce some message by opening a new window and running the following Kafka producer command.
+Type 3 or 4 messages hitting the 'return' key after each message.
 ```text
 ./kafka-console-producer.sh --broker-list $BootstrapServerString --producer.config client.properties --topic aerospike-airforce-1
 >Instrument Check
@@ -177,7 +177,8 @@ Type 3 or 4 messages entering the 'return' key after each.
 >Ready for takeoff
 ```
 
-We are noe ready to consume these messages. Open a new window and run the following
+You're now ready to start a client consumer app. Open a new window and type the following. You 
+should see the same messages you published earlier.
 ```text
 ./kafka-console-consumer.sh --bootstrap-server $BootstrapServerString --consumer.config client.properties --topic aerospike-airforce-1 --from-beginning
 Instrument Check
