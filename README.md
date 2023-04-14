@@ -7,7 +7,7 @@ In this article we create an AWS MSK Kafka resource using AWS IAM Roles
 and Policies to authenticate user access. We then create an Aerospike Database
 cluster and insert some sample messages which in turn get shipped to AWS Kafka 
 via the Aerospike Kafka Source connector. The article is focused around using IAM to 
-authenticase clients and will guide the reader step by step on how to 
+authenticate clients and will guide the reader step by step on how to 
 achieve this.
 <div align="center">. . . .</div>
 
@@ -15,16 +15,19 @@ achieve this.
 
 ## AWS MKS Kafka
 
-In this section we will setup a 3 node Kafka cluster. 
-- From MSK go ahead and create a new cluster, selecting Quick Create
-- Select Provisioned cluster type and select instance type kafka.t3.small
-- Select the EBS storage as 10GB
-- Make a note of the VPV, Subnets and the Security group ID
+In this section we setup a simple 3 node Kafka cluster. 
+- From the AWS Console select MSK service, then create a new cluster, selecting Quick Create
+- Select the Provisioned cluster type and select instance type ```kafka.t3.small```
+- Select the EBS storage and a size of 10 GB
+- Make a note of the VPC, Subnets and the Security group ID as you will need these later.
 
-Next we create the IAM Policy and Roles
+Next create the IAM Policy and Roles
 
-- Create a new IAM Policy, open the JSON tab and paste in the following replacing
-  *region:Account-ID*. Save the policy with the name *msk-tutorial-policy*
+- Again from the AWS Console, select the IAM service.
+   - Create a new IAM Policy by opening the JSON tab and pasting in the following, replacing
+  **region:Account-ID**. 
+     
+   - Save the policy and name it *msk-tutorial-policy*
 ```json
 {
     "Version": "2012-10-17",
