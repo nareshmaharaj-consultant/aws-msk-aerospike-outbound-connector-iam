@@ -3,11 +3,11 @@
 <img width="1000" src="img_msk.png">
 </p>
 
-In this article we create an AWS MKS Kafka resource using AWS IAM Roles 
-and Policies to authenticate user access. We then create an Aeropsike 
-cluster and send some sample messages to AWS Kafka via the Aerospike 
-Kafka Source connector. The article is centred around using IAM to 
-authenticase users and will guide the reader step by step on how to 
+In this article we create an AWS MSK Kafka resource using AWS IAM Roles 
+and Policies to authenticate user access. We then create an Aerospike Database
+cluster and insert some sample messages which in turn get shipped to AWS Kafka 
+via the Aerospike Kafka Source connector. The article is focused around using IAM to 
+authenticase clients and will guide the reader step by step on how to 
 achieve this.
 <div align="center">. . . .</div>
 
