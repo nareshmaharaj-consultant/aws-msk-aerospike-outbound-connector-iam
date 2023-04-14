@@ -422,5 +422,6 @@ Check to see if the data was seen in the Kafka Consumer window
 ## Conclusion
 
 In this article we successuly looked at how easy it is to send data from Aerospike to Kafka authenticating clients via AWS IAM permissions.
-We created an Aerospike Database from scratch, setup our AWS MSK Kafka cluster and also used the Aerospike Outbound Kafka Connector.
+We created an Aerospike Database from scratch, setup our AWS MSK Kafka cluster and also used the Aerospike Outbound Kafka Connector
+to easily build a realtime streaming data pipeline.
 
