@@ -379,6 +379,7 @@ logging:
 Create the ca certificate trust store for use in the config kafaka outbound connector config.
 ```bash
 sudo cp /usr/lib/jvm/java-11-amazon-corretto/lib/security/cacerts /etc/aerospike-kafka-outbound/kafka.client.truststore.jks
+sudo chmod 755 /etc/aerospike-kafka-outbound/kafka.client.truststore.jks
 ```
 
 You will need a copy the AWS IAM Kafka Auth Jar to made available to the connector. If you recall
@@ -394,3 +395,32 @@ sudo systemctl start aerospike-kafka-outbound
 ```
 
 ## Sending Data from Aerospike to Kafka
+
+
+Open a separate window so we can list all messages on the aerospike kafka topic. Start by adding the one of the private endpoint bootstrap server to a shell variable for ease.
+```text
+export BootstrapServerString="b-3.msktutorialcluster.450050.c11.kafka.us-east-1.amazonaws.com:9098"
+```
+Run the comsumer client as follows
+```text
+./kafka-console-consumer.sh --bootstrap-server $BootstrapServerString --consumer.config client.properties --topic aerospike --from-beginning
+```
+
+In a new window start the aql client which connects to your Aerospike Database.
+```text
+aql --auth EXTERNAL_INSECURE -U iam-real -P secret-pwd
+```
+Insert some data
+```text
+insert into test (pk,a) values(400,"Your winning lottery ticket")
+```
+Check to see if the data was seen in the Kafka Consumer window
+```text
+{"metadata":{"namespace":"test","userKey":400,"digest":"W7eGav2hKfOU00xx7mnOPYa2uCo=","msg":"write","gen":1,"lut":1681488437767,"exp":0},"a":"Your winning lottery ticket"}
+```
+
+## Conclusion
+
+In this article we successuly looked at how easy it is to send data from Aerospike to Kafka authenticating clients via AWS IAM permissions.
+We created an Aerospike Database from scratch, setup our AWS MSK Kafka cluster and also used the Aerospike Outbound Kafka Connector.
+
