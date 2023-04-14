@@ -92,7 +92,7 @@ Next we create a client machine where we install the necessary Kafka tools to ac
 - Open the VPC section
   https://console.aws.amazon.com/vpc/
   
-    - Then click on Security Groups on the left hand menu
+    - Then click on Security Groups on the left-hand menu
     - Find the security group from the MSK cluster and click on it.
  
   - e.g.: sg-e5f51dfb
@@ -105,7 +105,7 @@ Next we create a client machine where we install the necessary Kafka tools to ac
 
 
 ## Kafka Topics
-So you've succesfully created your first Kafka cluster and Kafka client machine. Now 
+So you've successfully created your first Kafka cluster and Kafka client machine. Now 
 go ahead and test you can access the MSK cluster by creating a topic, producing and consuming 
 some sample messages confirming everything is working as expected.
 
@@ -235,7 +235,7 @@ sudo mkdir -p /var/log/aerospike/
 sudo systemctl enable aerospike
 
 ```
-- Confirm the storage disk for aerospike data is available.
+- Confirm the storage disk for Aerospike data is available.
 ```bash
 lsblk
 NAME    MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
@@ -243,7 +243,7 @@ xvda    202:0    0  10G  0 disk
 └─xvda1 202:1    0  10G  0 part /
 xvdb    202:16   0  10G  0 disk   <<----------------- This one!
 ```
-- Replace the Aerospike configration file under /etc/aerospike/aerospike.conf with the following.
+- Replace the Aerospike configuration file under /etc/aerospike/aerospike.conf with the following.
  
   - Under ```heartbeat.address``` add in your internal 172.x.x.x address.
   - For ```xdr.dc.node-address-port``` enter the {kafka-client-machine-address}:8080 
