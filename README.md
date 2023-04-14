@@ -210,7 +210,7 @@ Start by creating a new ec2 instance.
 
   ![img_4_msk.png](img_4_msk.png)
 
- - Add the extra volume for Aerospike storage
+ - Add the extra volume for the Aerospike data storage layer
 
    - Simple EBS volume is all that is required for now
   
@@ -235,7 +235,7 @@ sudo mkdir -p /var/log/aerospike/
 sudo systemctl enable aerospike
 
 ```
-- Confirm the data storage disk for aerospike data is available
+- Confirm the storage disk for aerospike data is available.
 ```bash
 lsblk
 NAME    MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
@@ -326,8 +326,8 @@ sudo systemctl status aerospike
 
 ## Aerospike Kafka Source Connector
 
-From the Kafka Client instance we can go ahead an [install](https://docs.aerospike.com/connect/kafka/from-asdb/installing#installing-on-linux) the Aerospike Kafka Source Connector. This 
-is our outbound connector to send data from the Aerospike database to MSK.
+From the Kafka Client ec2 instance go ahead an [install](https://docs.aerospike.com/connect/kafka/from-asdb/installing#installing-on-linux) the Aerospike Kafka Source Connector. This 
+is uour outbound connector to send data from the Aerospike database to MSK.
 
 ```bash 
 sudo yum install java #( install 11+ JDK )
@@ -335,7 +335,9 @@ wget https://enterprise.aerospike.com/artifacts/enterprise/aerospike-kafka-outbo
 sudo rpm -i aerospike-kafka-outbound-5.0.0-1.noarch.rpm
 ```
 
-Configure the outbound connector. Note outbound and source connector are used interchangeably 
+### Configure the outbound connector. 
+
+The terms outbound and source connector are used interchangeably 
 in this article.
 
 Add the following contents to the file ```/etc/aerospike-kafka-outbound/aerospike-kafka-outbound.yml```.
@@ -391,8 +393,8 @@ sudo cp /usr/lib/jvm/java-11-amazon-corretto/lib/security/cacerts /etc/aerospike
 sudo chmod 755 /etc/aerospike-kafka-outbound/kafka.client.truststore.jks
 ```
 
-You will need a copy the AWS IAM Kafka Auth Jar to made available to the connector. If you recall
-we downloaded this earlier and added the jar to the kafka/libs folder.
+You will need a copy the AWS IAM Kafka Auth Jar file to be made available to the Aerospike Outbound Kafka Connector. If you recall
+you downloaded this earlier and added the jar to the kafka/libs folder.
 ```bash
 sudo cp kafka_2.12-2.8.1/libs/aws-msk-iam-auth-1.1.1-all.jar /opt/aerospike-kafka-outbound/lib/aws-msk-iam-auth-1.1.1-all.jar
 ```
@@ -406,31 +408,32 @@ sudo systemctl start aerospike-kafka-outbound
 ## Sending Data from Aerospike to Kafka
 
 
-Open a separate window so we can list all messages on the aerospike kafka topic. Start by adding the one of the private endpoint bootstrap server to a shell variable for ease.
+Open a separate window so you can list all messages on the aerospike kafka topic. Start by adding one of the private 
+endpoint bootstrap servers as an environment variable for ease of use.
 ```text
 export BootstrapServerString="b-3.msktutorialcluster.450050.c11.kafka.us-east-1.amazonaws.com:9098"
 ```
-Run the comsumer client as follows
+Run the consumer client as follows
 ```text
 ./kafka-console-consumer.sh --bootstrap-server $BootstrapServerString --consumer.config client.properties --topic aerospike --from-beginning
 ```
 
-In a new window start the aql client which connects to your Aerospike Database.
+In a new window start the aql command line client which connects to your Aerospike Database.
 ```text
-aql --auth EXTERNAL_INSECURE -U iam-real -P secret-pwd
+aql -U auser -P a-secret-pwd
 ```
 Insert some data
 ```text
 insert into test (pk,a) values(400,"Your winning lottery ticket")
 ```
-Check to see if the data was seen in the Kafka Consumer window
+Check to see if the message appears in the Kafka Consumer window.
 ```text
 {"metadata":{"namespace":"test","userKey":400,"digest":"W7eGav2hKfOU00xx7mnOPYa2uCo=","msg":"write","gen":1,"lut":1681488437767,"exp":0},"a":"Your winning lottery ticket"}
 ```
 
 ## Conclusion
 
-In this article we successuly looked at how easy it is to send data from Aerospike to Kafka authenticating clients via AWS IAM permissions.
+In this article you successfully looked at how easy it is to send data from Aerospike to AWS MSK Kafka while authenticating clients via AWS IAM permissions.
 We created an Aerospike Database from scratch, setup our AWS MSK Kafka cluster and also used the Aerospike Outbound Kafka Connector
 to easily build a realtime streaming data pipeline.
 
