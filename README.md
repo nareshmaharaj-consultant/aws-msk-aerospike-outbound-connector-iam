@@ -27,7 +27,7 @@ Next create the IAM Policy and Roles
    - Create a new IAM Policy by opening the JSON tab and pasting in the following, replacing
   **region:Account-ID**. 
      
-   - Save the policy and name it *msk-tutorial-policy*
+   - Save the policy and name it:  *msk-tutorial-policy*
 ```json
 {
     "Version": "2012-10-17",
@@ -67,23 +67,24 @@ Next create the IAM Policy and Roles
     ]
 }
 ```
-- Create the IAM Role. Under Common Use Cases, select EC2 and then next.
-- Under permissions, select the policy named *msk-tutorial-policy* and then next.
-- Give the role a name like *msk-tutorial-role* and click the Create Role button.
+- Create the IAM Role
+   - Under Common Use Cases, select EC2 and then next.
+   - Under permissions, select the policy named *msk-tutorial-policy* and then next.
+  - Give the role a name like *msk-tutorial-role* and click the Create Role button.
 
 ## Kafka Client Machine
 
-Next we create a clinet machine where we install the Kafka tools to access our MKS cluster.
+Next we create a client machine where we install the necessary Kafka tools to access our MSK cluster.
 
-- Create an ec2 instance type t2.micro
+- Create a new ec2 instance type t2.micro
 - Use the default AMI: Amazon Linux 2023 AMI 2023.0.20230322.0 x86_64 HVM kernel-6.1
   
-  - The AMI may be different at the time of reading this article
+  - The AMI may be different depending on your region. 
   
 - Create a key pair if required
 - Under [Advanced Options.IAM instance profile], select the IAM Role created earlier
-- Lanuch the instance. 
-- Under the instances launched, choose the instance just created. Click on the securty tab and 
+- Launch the instance. 
+- Under instances launched, choose the instance you just created. Click on the security tab and 
   make a note of the security group associated with this instance.
   
   - e.g.: sg-0914e6271c97ae4c9 (launch-wizard-1)
@@ -91,22 +92,22 @@ Next we create a clinet machine where we install the Kafka tools to access our M
 - Open the VPC section
   https://console.aws.amazon.com/vpc/
   
-- Then click on Security Groups on the left hand menu
-- Find the security group from the MKS cluster and click on it.
+    - Then click on Security Groups on the left hand menu
+    - Find the security group from the MSK cluster and click on it.
  
   - e.g.: sg-e5f51dfb
   
-- Choose edit Inbound Rules
-- Create a new rule to allow all traffic from the new ec2 instance
+  - Choose edit Inbound Rules
+  - Create a new rule to allow all traffic from the new ec2 instance
 
 
   > ![sg1_msk.png](sg1_msk.png)
 
 
 ## Kafka Topics
-So we have succesfully created our Kafka cluster and Kafka Client machine so lets 
-go ahead and test the access by creating a topic in Kafka, producing and comsuming messages
-to confirm everything is working as expected.
+So you've succesfully created your first Kafka cluster and Kafka client machine. Now 
+go ahead and test you can access the MSK cluster by creating a topic, producing and consuming 
+some sample messages confirming everything is working as expected.
 
 - From the MSK Cluster make a note of the Kafka version being used. 
   - In this example we are using 2.8.1
@@ -123,6 +124,8 @@ to confirm everything is working as expected.
   - ```wget https://github.com/aws/aws-msk-iam-auth/releases/download/v1.1.1/aws-msk-iam-auth-1.1.1-all.jar```
   - ```cd ../bin/```
   
+  - Create a file to use when authenticating to MSK. It will define the SASL mechanism to use and reference the Java class
+file that will handle the IAM callbacks.
 ```bash
 cat <<EOF> client.properties
 security.protocol=SASL_SSL
